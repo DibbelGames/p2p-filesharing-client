@@ -1,0 +1,3 @@
+/home/leon/Documents/Gnutella/bin/Debug/net6.0/win-x64/publish/Gnutella.pdb
+/home/leon/Documents/Gnutella/bin/Debug/net6.0/win-x64/publish/raylib.dll
+/home/leon/Documents/Gnutella/bin/Debug/net6.0/win-x64/publish/Gnutella.exe

@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "6bjxeypxz8GwZMEIvTBeCZnZLKddvgrYd3jB+UsfqptEa1Kk4aLu0sdOKuf723Ra9IWNca74sGmO0nVGlwxAZg==",
+  "success": true,
+  "projectFilePath": "/home/leon/Documents/p2p-filesharing-client/Gnutella.csproj",
+  "expectedPackageFiles": [
+    "/home/leon/.nuget/packages/raylib-cs/4.2.0.1/raylib-cs.4.2.0.1.nupkg.sha512",
+    "/home/leon/.nuget/packages/system.numerics.vectors/4.5.0/system.numerics.vectors.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}
