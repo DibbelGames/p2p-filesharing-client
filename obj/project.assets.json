@@ -128,9 +128,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/leon/Documents/p2p-filesharing-client/Gnutella.csproj",
-      "projectName": "Gnutella",
-      "projectPath": "/home/leon/Documents/p2p-filesharing-client/Gnutella.csproj",
+      "projectUniqueName": "/home/leon/Documents/p2p-filesharing-client/p2p-filesharing-client.csproj",
+      "projectName": "p2p-filesharing-client",
+      "projectPath": "/home/leon/Documents/p2p-filesharing-client/p2p-filesharing-client.csproj",
       "packagesPath": "/home/leon/.nuget/packages/",
       "outputPath": "/home/leon/Documents/p2p-filesharing-client/obj/",
       "projectStyle": "PackageReference",
