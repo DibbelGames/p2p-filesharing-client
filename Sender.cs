@@ -22,40 +22,45 @@ namespace Gnutella
 
         public async void SendPing()
         {
-            foreach (Peer peer in peerList.listedPeers)
+            if (peerList.listedPeers.Count != 0)
             {
-                //if no pong has yet arrived => increase "missed pings"
-                //if a pong has arrived, the "missed pings" counter resets
-                if (peer.waitingForPong != 0)
+                for (int i = 0; i < peerList.listedPeers.Count; i++)
                 {
-                    peer.missedPings++;
-                }
-                else
-                {
-                    peer.missedPings = 0;
-                }
-                if (peer.missedPings < 6)
-                {
-                    UdpClient client = new UdpClient(11001);
-                    Console.WriteLine("Sending Ping");
-                    //client.Connect("192.168.178.75", 11000);
-                    client.Connect(peer.endPoint.Address, 11000);
+                    Peer peer = peerList.listedPeers[i];
+                    //if no pong has yet arrived => increase "missed pings"
+                    //if a pong has arrived, the "missed pings" counter resets
+                    if (peer.waitingForPong != 0)
+                    {
+                        peer.missedPings++;
+                        Console.WriteLine("Ping Missed by " + peer.endPoint.Address);
+                    }
+                    else
+                    {
+                        peer.missedPings = 0;
+                    }
+                    if (peer.missedPings < 5)
+                    {
+                        UdpClient client = new UdpClient(11001);
+                        Console.WriteLine("Sending Ping");
+                        //client.Connect("192.168.178.75", 11000);
+                        client.Connect(peer.endPoint.Address, 11000);
 
-                    Byte[] sendBytes = Encoding.ASCII.GetBytes("ping");
-                    client.Send(sendBytes, sendBytes.Length);
-                    Console.WriteLine("sent ping");
-                    peer.waitingForPong = 1;
+                        Byte[] sendBytes = Encoding.ASCII.GetBytes("ping");
+                        client.Send(sendBytes, sendBytes.Length);
+                        Console.WriteLine("sent ping");
+                        peer.waitingForPong = 1;
 
-                    client.Dispose();
-                }
-                else
-                {
-                    peerList.listedPeers.Remove(peer);
+                        client.Dispose();
+                    }
+                    else
+                    {
+                        peerList.listedPeers.Remove(peer);
+                    }
                 }
             }
 
             //wait 10 secs for next ping flood
-            await Task.Delay(10000);
+            await Task.Delay(2500);
 
             SendPing();
         }
@@ -67,11 +72,26 @@ namespace Gnutella
             client.Connect(endPoint.Address, 11000);
 
             Byte[] sendBytes = Encoding.ASCII.GetBytes("pong");
+            //Byte[] sendBytes = new Byte[] { 112, 105, 110, 103 };
             client.Send(sendBytes, sendBytes.Length);
 
             client.Dispose();
 
             Console.WriteLine("sent pong");
         }
+
+        /*public void SendQuery(IPEndPoint endPoint, string filename)
+        {
+            UdpClient client = new UdpClient(11003);
+            Console.WriteLine("Sending Query for -" + filename + "-");
+            client.Connect(endPoint.Address, 11000);
+
+            Byte[] sendBytes = Encoding.ASCII.GetBytes("query_" + );
+            client.Send(sendBytes, sendBytes.Length);
+
+            client.Dispose();
+
+            Console.WriteLine("sent query");
+        }*/
     }
 }

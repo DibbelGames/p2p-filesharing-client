@@ -2,6 +2,8 @@
 using System.Threading;
 using Raylib_cs;
 
+using System.Text;
+
 namespace Gnutella
 {
     static class Program
@@ -32,14 +34,21 @@ namespace Gnutella
 
                 Raylib.DrawText("Waddup", 8, 8, 18, Color.BLACK);
 
-                foreach (Peer peer in peerList.listedPeers)
+                for (int i = 0; i < peerList.listedPeers.Count; i++)
                 {
+                    Peer peer = peerList.listedPeers[i];
+
                     Raylib.DrawText("Peer: " + peer.endPoint.Address + ", " + peer.endPoint.Port + ", " + peer.missedPings + ", " + peer.waitingForPong, 8, 50, 24, Color.BLACK);
                 }
 
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
                 {
-                    sender.SendPing();
+                    Byte[] sendBytes = Encoding.ASCII.GetBytes("ping");
+                    //  Console.WriteLine(Encoding.ASCII.GetBytes("leon69"));
+                    foreach (Byte b in sendBytes)
+                    {
+                        Console.WriteLine(b);
+                    }
                 }
 
                 Raylib.EndDrawing();

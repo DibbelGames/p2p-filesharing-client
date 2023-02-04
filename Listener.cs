@@ -48,8 +48,10 @@ namespace Gnutella
                 }
                 else
                 {
-                    foreach (Peer peer in peerList.listedPeers)
+                    for (int i = 0; i < peerList.listedPeers.Count; i++)
                     {
+                        Peer peer = peerList.listedPeers[i];
+
                         if (peer.endPoint.Address.ToString() != endpoint.Address.ToString())
                         {
                             Console.WriteLine("idk man");
@@ -64,11 +66,14 @@ namespace Gnutella
             }
             else if (data == "pong")
             {
-                foreach (Peer peer in peerList.listedPeers)
+                //change "missedPings"
+                for (int i = 0; i < peerList.listedPeers.Count; i++)
                 {
+                    Peer peer = peerList.listedPeers[i];
+
                     if (peer.endPoint.Address.ToString() == endpoint.Address.ToString())
                     {
-                        peer.missedPings = 0;
+                        peer.waitingForPong = 0;
                     }
                 }
             }
