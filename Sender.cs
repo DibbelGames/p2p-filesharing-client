@@ -45,7 +45,8 @@ namespace Gnutella
                         //client.Connect("192.168.178.75", 11000);
                         client.Connect(peer.endPoint.Address, 11000);
 
-                        Byte[] sendBytes = Encoding.ASCII.GetBytes("ping");
+                        //Byte[] sendBytes = Encoding.ASCII.GetBytes("ping");
+                        Byte[] sendBytes = new Byte[] { 1 };
                         client.Send(sendBytes, sendBytes.Length);
                         Console.WriteLine("sent ping");
                         peer.waitingForPong = 1;
@@ -71,8 +72,8 @@ namespace Gnutella
             Console.WriteLine("Sending Pong");
             client.Connect(endPoint.Address, 11000);
 
-            Byte[] sendBytes = Encoding.ASCII.GetBytes("pong");
-            //Byte[] sendBytes = new Byte[] { 112, 105, 110, 103 };
+            //Byte[] sendBytes = Encoding.ASCII.GetBytes("pong");
+            Byte[] sendBytes = new Byte[] { 2 };
             client.Send(sendBytes, sendBytes.Length);
 
             client.Dispose();
