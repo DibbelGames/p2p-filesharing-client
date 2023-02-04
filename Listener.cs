@@ -37,17 +37,40 @@ namespace Gnutella
 
             if (data == "ping")
             {
-                foreach (Peer peer in peerList.listedPeers)
+                //check if connection to the peer who sent the ping is already established
+                //if not or if no connections exist => add the peer
+                if (peerList.listedPeers.Count == 0)
                 {
-                    if (peer.endPoint.Address != endpoint.Address)
+                    Console.WriteLine("zero");
+                    Peer newPeer = new Peer(new IPEndPoint(endpoint.Address, 11000));
+                    peerList.listedPeers.Add(newPeer);
+                    Console.WriteLine("added");
+                }
+                else
+                {
+                    foreach (Peer peer in peerList.listedPeers)
                     {
-                        Peer newPeer = new Peer(new IPEndPoint(endpoint.Address, 11000));
+                        if (peer.endPoint.Address.ToString() != endpoint.Address.ToString())
+                        {
+                            Console.WriteLine("idk man");
+                            Peer newPeer = new Peer(new IPEndPoint(endpoint.Address, 11000));
+                            peerList.listedPeers.Add(newPeer);
+                        }
                     }
                 }
+
+                //send pong to hold connection
+                sender.SendPong(endpoint);
             }
             else if (data == "pong")
             {
-
+                foreach (Peer peer in peerList.listedPeers)
+                {
+                    if (peer.endPoint.Address.ToString() == endpoint.Address.ToString())
+                    {
+                        peer.missedPings = 0;
+                    }
+                }
             }
 
             Listen();

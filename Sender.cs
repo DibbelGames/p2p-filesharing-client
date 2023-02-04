@@ -24,6 +24,16 @@ namespace Gnutella
         {
             foreach (Peer peer in peerList.listedPeers)
             {
+                //if no pong has yet arrived => increase "missed pings"
+                //if a pong has arrived, the "missed pings" counter resets
+                if (peer.waitingForPong != 0)
+                {
+                    peer.missedPings++;
+                }
+                else
+                {
+                    peer.missedPings = 0;
+                }
                 if (peer.missedPings < 6)
                 {
                     UdpClient client = new UdpClient(11001);
@@ -43,9 +53,6 @@ namespace Gnutella
                     peerList.listedPeers.Remove(peer);
                 }
             }
-
-            //wait 5 secs for pong
-            await Task.Delay(5000);
 
             //wait 10 secs for next ping flood
             await Task.Delay(10000);

@@ -34,7 +34,7 @@ namespace Gnutella
 
                 foreach (Peer peer in peerList.listedPeers)
                 {
-                    Raylib.DrawText("Peer: " + peer.endPoint.Address + ", " + peer.endPoint.Port + ", " + peer.missedPings, 8, 50, 24, Color.BLACK);
+                    Raylib.DrawText("Peer: " + peer.endPoint.Address + ", " + peer.endPoint.Port + ", " + peer.missedPings + ", " + peer.waitingForPong, 8, 50, 24, Color.BLACK);
                 }
 
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
