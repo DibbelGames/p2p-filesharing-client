@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
@@ -9,10 +10,14 @@ namespace Gnutella
     class Listener
     {
         UdpClient client;
+        Sender sender;
+        PeerList peerList;
 
-        public Listener()
+        public Listener(Sender sender, PeerList peerList)
         {
             Console.WriteLine("hello - listener");
+            this.sender = sender;
+            this.peerList = peerList;
             this.client = new UdpClient(11000);
         }
 
@@ -20,19 +25,31 @@ namespace Gnutella
         {
             Console.WriteLine("Listening...");
 
-            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
 
-            // Blocks until a message returns on this socket from a remote host.
-            Byte[] receiveBytes = client.Receive(ref RemoteIpEndPoint);
-            string returnData = Encoding.ASCII.GetString(receiveBytes);
+            Byte[] data_bytes = client.Receive(ref endpoint);
+            string data = Encoding.ASCII.GetString(data_bytes);
 
-            // Uses the IPEndPoint object to determine which of these two hosts responded.
-            Console.WriteLine("This is the message you received " +
-                                         returnData.ToString());
-            Console.WriteLine("This message was sent from " +
-                                        RemoteIpEndPoint.Address.ToString() +
-                                        " on their port number " +
-                                        RemoteIpEndPoint.Port.ToString());
+            Console.WriteLine("Received: -" +
+                                         data.ToString() + "- from -" +
+                                         endpoint.Address.ToString() + "- on -" +
+                                         endpoint.Port.ToString() + "-");
+
+            if (data == "ping")
+            {
+                foreach (Peer peer in peerList.listedPeers)
+                {
+                    if (peer.endPoint.Address != endpoint.Address)
+                    {
+                        Peer newPeer = new Peer(new IPEndPoint(endpoint.Address, 11000));
+                    }
+                }
+            }
+            else if (data == "pong")
+            {
+
+            }
+
             Listen();
         }
     }
