@@ -34,12 +34,8 @@ namespace Gnutella
                                          data.ToString() + "- from -" +
                                          endpoint.Address.ToString() + "- on -" +
                                          endpoint.Port.ToString() + "-");
-            foreach (Byte b in data_bytes)
-            {
-                Console.WriteLine("Recieved: " + b);
-            }
 
-            if (data_bytes[0] == (byte)1)//if (data == "ping")
+            if (data_bytes[0] == (byte)1) //check if incoming data is a ping
             {
                 //check if connection to the peer who sent the ping is already established
                 //if not or if no connections exist => add the peer
@@ -68,9 +64,9 @@ namespace Gnutella
                 //send pong to hold connection
                 sender.SendPong(endpoint);
             }
-            else if (data_bytes[0] == (byte)2)//else if (data == "pong")
+            else if (data_bytes[0] == (byte)2) //check if its a pong
             {
-                //change "missedPings"
+                //change "waiting for pong" if pong is from a peer that still needs to send a pong
                 for (int i = 0; i < peerList.listedPeers.Count; i++)
                 {
                     Peer peer = peerList.listedPeers[i];
@@ -80,6 +76,12 @@ namespace Gnutella
                         peer.waitingForPong = 0;
                     }
                 }
+            }
+            else if (data_bytes[0] == (byte)3) //check if incoming data is a query
+            {
+                data_bytes.Skip(2);
+                string filename = Encoding.ASCII.GetString(data_bytes);
+                Console.WriteLine(filename);
             }
 
             Listen();

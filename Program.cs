@@ -3,6 +3,7 @@ using System.Threading;
 using Raylib_cs;
 
 using System.Text;
+using System.Net;
 
 namespace Gnutella
 {
@@ -43,12 +44,7 @@ namespace Gnutella
 
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
                 {
-                    Byte[] sendBytes = Encoding.ASCII.GetBytes("ping");
-                    //  Console.WriteLine(Encoding.ASCII.GetBytes("leon69"));
-                    foreach (Byte b in sendBytes)
-                    {
-                        Console.WriteLine(b);
-                    }
+                    sender.SendQuery(new IPEndPoint(IPAddress.Parse("192.168.178.75"), 11000), "cat.jpeg");
                 }
 
                 Raylib.EndDrawing();

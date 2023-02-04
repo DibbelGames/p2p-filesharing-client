@@ -81,18 +81,25 @@ namespace Gnutella
             Console.WriteLine("sent pong");
         }
 
-        /*public void SendQuery(IPEndPoint endPoint, string filename)
+        public void SendQuery(IPEndPoint endPoint, string filename)
         {
             UdpClient client = new UdpClient(11003);
             Console.WriteLine("Sending Query for -" + filename + "-");
             client.Connect(endPoint.Address, 11000);
 
-            Byte[] sendBytes = Encoding.ASCII.GetBytes("query_" + );
+            //**sending query in byte format**
+            //first byte (3) shows that its a query
+            //second byte (7) identifies the TTL
+            //other ones are the filename in byte format
+            Byte[] filenameBytes = Encoding.ASCII.GetBytes(filename);
+            Byte[] sendBytes = new Byte[] { 3, 7 };
+            sendBytes = sendBytes.Concat(filenameBytes).ToArray();
+
             client.Send(sendBytes, sendBytes.Length);
 
             client.Dispose();
 
             Console.WriteLine("sent query");
-        }*/
+        }
     }
 }
