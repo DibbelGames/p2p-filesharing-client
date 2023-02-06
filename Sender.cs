@@ -83,7 +83,7 @@ namespace Gnutella
             //Console.WriteLine("sent pong");
         }
 
-        public void SendQuery(string filename)
+        public void SendQuery(string filename, IPAddress receiver)
         {
             //send query for a file to every connected peer containing the filename
             openQuery = filename;
@@ -102,10 +102,7 @@ namespace Gnutella
                 //other ones are the filename in byte format
                 Byte[] filenameBytes = Encoding.ASCII.GetBytes(filename);
 
-                String strHostName = string.Empty;
-                IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
-                IPAddress[] addr = ipEntry.AddressList;
-                Byte[] ipAddress = addr[1].GetAddressBytes();
+                Byte[] ipAddress = receiver.GetAddressBytes();
 
                 Byte[] sendBytes = new Byte[] { 3, 7 };
                 sendBytes = sendBytes.Concat(ipAddress).ToArray();

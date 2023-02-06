@@ -46,18 +46,11 @@ namespace Gnutella
 
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
                 {
-                    sender.SendQuery("cat.txt");
-                }
-                if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
-                {
                     String strHostName = string.Empty;
                     IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
                     IPAddress[] addr = ipEntry.AddressList;
 
-                    for (int i = 0; i < addr.Length; i++)
-                    {
-                        Console.WriteLine("IP Address {0}: {1} ", i, addr[i].ToString());
-                    }
+                    sender.SendQuery("cat.txt", addr[1]);
                 }
 
                 Raylib.EndDrawing();

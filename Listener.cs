@@ -102,6 +102,11 @@ namespace Gnutella
                 else
                 {
                     Console.WriteLine("File not found!");
+                    if (ttl < 7)
+                    {
+                        ttl--;
+                        sender.SendQuery("cat.txt", new IPAddress(ipAdress));
+                    }
                 }
             }
             else if (dataBytes[0] == (byte)4) //check if incoming data is a file
