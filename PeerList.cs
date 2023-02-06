@@ -13,7 +13,8 @@ namespace Gnutella
         public PeerList()
         {
             //hardcoded entrypoint (127.0.0.1)
-            //listedPeers.Add(new Peer(new IPEndPoint(IPAddress.Parse("192.168.178.75"), 11000)));
+            //listedPeers.Add(new Peer(new IPEndPoint(IPAddress.Parse("192.168.178.37"), 11000)));
+            listedPeers.Add(new Peer(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000)));
         }
     }
 }

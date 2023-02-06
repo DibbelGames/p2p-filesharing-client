@@ -11,6 +11,7 @@ namespace Gnutella
     {
         //static UdpClient client = new UdpClient(11000);
 
+        public static FileSystem? fileSystem;
         public static PeerList? peerList;
         public static Sender? sender;
         public static Listener? listener;
@@ -19,9 +20,10 @@ namespace Gnutella
         {
             Raylib.InitWindow(640, 480, "Gnutella");
 
+            fileSystem = new FileSystem();
             peerList = new PeerList();
             sender = new Sender(peerList);
-            listener = new Listener(sender, peerList);
+            listener = new Listener(sender, peerList, fileSystem);
 
             Thread thread_sender = new Thread(sender.SendPing);
             Thread thread_listener = new Thread(listener.Listen);
@@ -44,7 +46,18 @@ namespace Gnutella
 
                 if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE))
                 {
-                    sender.SendQuery(new IPEndPoint(IPAddress.Parse("192.168.178.75"), 11000), "cat.jpeg");
+                    sender.SendQuery("cat.txt");
+                }
+                if (Raylib.IsKeyPressed(KeyboardKey.KEY_ENTER))
+                {
+                    String strHostName = string.Empty;
+                    IPHostEntry ipEntry = Dns.GetHostEntry(Dns.GetHostName());
+                    IPAddress[] addr = ipEntry.AddressList;
+
+                    for (int i = 0; i < addr.Length; i++)
+                    {
+                        Console.WriteLine("IP Address {0}: {1} ", i, addr[i].ToString());
+                    }
                 }
 
                 Raylib.EndDrawing();
