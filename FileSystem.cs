@@ -38,9 +38,17 @@ namespace Gnutella
         public void CreateFile(string filename, byte[] data)
         {
             //creating a file from given bytes
-            using var writer = new BinaryWriter(File.OpenWrite(mypath + filename));
-            writer.Write(data);
-            Console.WriteLine("File created!");
+            //removing the file first if it exists to make sure that they dont merge
+            if (File.Exists(mypath + filename))
+            {
+                File.Delete(mypath + filename);
+            }
+            else
+            {
+                using var writer = new BinaryWriter(File.OpenWrite(mypath + filename));
+                writer.Write(data);
+                Console.WriteLine("File created!");
+            }
         }
     }
 }
