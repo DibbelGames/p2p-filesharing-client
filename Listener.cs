@@ -1,10 +1,7 @@
 using System;
-using System.IO;
-using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using Raylib_cs;
 
 namespace Gnutella
 {
@@ -26,18 +23,10 @@ namespace Gnutella
 
         public void Listen()
         {
-            //Console.WriteLine("Listening...");
-
             IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, 0);
 
+            //receiving incoming data
             Byte[] dataBytes = client.Receive(ref endpoint);
-            string data = Encoding.ASCII.GetString(dataBytes);
-
-            /*foreach (byte b in dataBytes)
-            {
-                Console.WriteLine("Received: " + (int)b);
-            }*/
-            //Console.WriteLine("Received: -" + dataBytes.ToString() + "- from -" + endpoint.Address.ToString() + "- on -" + endpoint.Port.ToString() + "-");
 
             if (dataBytes[0] == (byte)1) //check if incoming data is a ping
             {
@@ -51,15 +40,21 @@ namespace Gnutella
                 }
                 else
                 {
+                    int k = 0;
                     for (int i = 0; i < peerList.listedPeers.Count; i++)
                     {
+
                         Peer peer = peerList.listedPeers[i];
 
-                        if (peer.endPoint.Address.ToString() != endpoint.Address.ToString())
+                        if (peer.endPoint.Address.ToString() == endpoint.Address.ToString())
                         {
-                            Peer newPeer = new Peer(new IPEndPoint(endpoint.Address, 11000));
-                            peerList.listedPeers.Add(newPeer);
+                            k++;
                         }
+                    }
+
+                    if (k == 0)
+                    {
+                        peerList.AddPeer(endpoint.Address.ToString());
                     }
                 }
 
@@ -94,23 +89,23 @@ namespace Gnutella
 
                 if (fileSystem.CheckForFile(filename))
                 {
-                    Console.WriteLine("File found!");
+                    //if file is in storage, get the file in bytes and send them to the receiver
                     byte[] file = fileSystem.GetFile(filename);
                     sender.SendFile(new IPEndPoint(new IPAddress(ipAdress), 11000), file);
-                    //fileSystem.CreateFile(filename, file);
                 }
                 else
                 {
-                    Console.WriteLine("File not found!");
+                    //if file isnt found and ttl isnt yet 0 => send the same query to all connected peers with the ip of the receiever
                     if (ttl < 7)
                     {
                         ttl--;
-                        sender.SendQuery("cat.txt", new IPAddress(ipAdress));
+                        sender.SendQuery(filename, new IPAddress(ipAdress));
                     }
                 }
             }
             else if (dataBytes[0] == (byte)4) //check if incoming data is a file
             {
+                //if incoming data is a file (case 4) => create a file from the bytes with the name of the last query made
                 byte[] fileBytes = new byte[dataBytes.Length - 1];
                 Array.Copy(dataBytes, 1, fileBytes, 0, fileBytes.Length);
                 fileSystem.CreateFile(sender.openQuery, fileBytes);
