@@ -14,8 +14,8 @@ namespace Gnutella
         private int fontSize;
 
         private bool selected = false;
-        public List<char> input = new List<char>();
-        public string input_string;
+        private List<char> input = new List<char>();
+        public string input_string = string.Empty;
         private int input_size = 0;
 
         public TextBox(Vector2 position, Vector2 size, string placeholder, int fontSize)
@@ -133,6 +133,41 @@ namespace Gnutella
 
             DrawRectangleRec(box, boxColor);
             DrawText(placeholder, (int)position.X + 4, (int)position.Y + GetFontDefault().baseSize / 2, fontSize, Color.BLACK);
+        }
+    }
+
+    public class InformationBox
+    {
+        private Vector2 position;
+
+        private string text = string.Empty;
+        private int fontSize;
+
+        int frameCounter = -100000;
+
+        public InformationBox(Vector2 position, string text, int fontSize)
+        {
+            this.position = position;
+            this.text = text;
+            this.fontSize = fontSize;
+        }
+
+        public void ShowInfo(string text)
+        {
+            frameCounter = 0;
+            this.text = text;
+        }
+
+        public void Main()
+        {
+            frameCounter++;
+            if (frameCounter >= 60 * 5)
+            {
+                text = "";
+                frameCounter = 0;
+            }
+
+            DrawText(text, (int)position.X, (int)position.Y, fontSize, Color.RED);
         }
     }
 }

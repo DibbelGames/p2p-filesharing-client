@@ -7,10 +7,13 @@ namespace Gnutella
         string mypath = "/home/leon/Documents/Gnutella_Files/";
         string[] files;
 
-        public FileSystem()
+        InformationBox alerts;
+
+        public FileSystem(InformationBox alerts)
         {
             //updating the stored files
             files = Directory.GetFiles(mypath);
+            this.alerts = alerts;
         }
 
         public bool CheckForFile(string filename)
@@ -48,6 +51,7 @@ namespace Gnutella
                 using var writer = new BinaryWriter(File.OpenWrite(mypath + filename));
                 writer.Write(data);
                 Console.WriteLine("File created!");
+                alerts.ShowInfo("File created! \n(" + filename + ")");
             }
         }
     }

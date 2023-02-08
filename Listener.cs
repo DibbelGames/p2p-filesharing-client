@@ -11,13 +11,15 @@ namespace Gnutella
         PeerList peerList;
         FileSystem fileSystem;
         UdpClient client;
+        InformationBox alerts;
 
-        public Listener(Sender sender, PeerList peerList, FileSystem fileSystem)
+        public Listener(Sender sender, PeerList peerList, FileSystem fileSystem, InformationBox alerts)
         {
             Console.WriteLine("hello - listener");
             this.sender = sender;
             this.peerList = peerList;
             this.fileSystem = fileSystem;
+            this.alerts = alerts;
             this.client = new UdpClient(11000);
         }
 
@@ -43,12 +45,13 @@ namespace Gnutella
                     int k = 0;
                     for (int i = 0; i < peerList.listedPeers.Count; i++)
                     {
-
                         Peer peer = peerList.listedPeers[i];
-
-                        if (peer.endPoint.Address.ToString() == endpoint.Address.ToString())
+                        if (peer.endPoint != null)
                         {
-                            k++;
+                            if (peer.endPoint.Address.ToString() == endpoint.Address.ToString())
+                            {
+                                k++;
+                            }
                         }
                     }
 
@@ -68,9 +71,12 @@ namespace Gnutella
                 {
                     Peer peer = peerList.listedPeers[i];
 
-                    if (peer.endPoint.Address.ToString() == endpoint.Address.ToString())
+                    if (peer.endPoint != null)
                     {
-                        peer.waitingForPong = 0;
+                        if (peer.endPoint.Address.ToString() == endpoint.Address.ToString())
+                        {
+                            peer.waitingForPong = 0;
+                        }
                     }
                 }
             }

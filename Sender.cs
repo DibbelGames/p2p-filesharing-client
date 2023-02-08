@@ -8,11 +8,13 @@ namespace Gnutella
     class Sender
     {
         PeerList peerList;
+        InformationBox alerts;
 
-        public string? openQuery;
+        public string openQuery = string.Empty;
 
-        public Sender(PeerList peerList)
+        public Sender(PeerList peerList, InformationBox alerts)
         {
+            this.alerts = alerts;
             Console.WriteLine("hello - sender");
             this.peerList = peerList;
             SendPing();
@@ -30,7 +32,10 @@ namespace Gnutella
                     if (peer.waitingForPong != 0)
                     {
                         peer.missedPings++;
-                        Console.WriteLine("Ping Missed by " + peer.endPoint.Address);
+                        if (peer.endPoint != null)
+                        {
+                            Console.WriteLine("Ping Missed by " + peer.endPoint.Address);
+                        }
                     }
                     else
                     {
@@ -41,7 +46,10 @@ namespace Gnutella
                         try
                         {
                             UdpClient client = new UdpClient(11001);
-                            client.Connect(peer.endPoint.Address, 11000);
+                            if (peer.endPoint != null)
+                            {
+                                client.Connect(peer.endPoint.Address, 11000);
+                            }
 
                             //send ping (one byte which is 1) if the receiving peer hasnt missed the last 5 pings
                             Byte[] sendBytes = new Byte[] { 1 };
@@ -57,7 +65,8 @@ namespace Gnutella
                     }
                     else
                     {
-                        peerList.listedPeers.Remove(peer);
+                        if (peer.endPoint != null)
+                            peerList.RemovePeer(peer.endPoint.Address.ToString());
                     }
                 }
             }
@@ -100,8 +109,10 @@ namespace Gnutella
 
                     UdpClient client = new UdpClient(11003);
                     Console.WriteLine("Sending Query for -" + filename + "-");
-                    client.Connect(peer.endPoint.Address, 11000);
-
+                    if (peer.endPoint != null)
+                    {
+                        client.Connect(peer.endPoint.Address, 11000);
+                    }
                     //**sending query in byte format**
                     //first byte (3) shows that its a query
                     //second byte (7) identifies the TTL
@@ -115,6 +126,8 @@ namespace Gnutella
                     sendBytes = sendBytes.Concat(filenameBytes).ToArray();
 
                     client.Send(sendBytes, sendBytes.Length);
+
+                    alerts.ShowInfo("Asking for file! \n(" + filename + ")");
 
                     client.Dispose();
                 }
