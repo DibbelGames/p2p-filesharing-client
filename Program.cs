@@ -19,7 +19,8 @@ namespace Gnutella
 
         public static void Main()
         {
-            Raylib.InitWindow(640, 480, "Gnutella");
+            Raylib.InitWindow(640, 480, "Antheia");
+            Raylib.SetWindowIcon(Raylib.LoadImage("img/icon.png"));
             Raylib.SetTargetFPS(60);
 
             //ui elements
@@ -44,9 +45,8 @@ namespace Gnutella
                 Raylib.BeginDrawing();
                 Raylib.ClearBackground(Color.WHITE);
 
-                Raylib.DrawText("Connected Peers:", 8, 8, 24, Color.BLACK);
-
                 //UI
+                Raylib.DrawText("Connected Peers:", 8, 8, 24, Color.BLACK);
                 //drawing all the connected peers
                 for (int i = 0; i < peerList.listedPeers.Count; i++)
                 {
@@ -70,11 +70,13 @@ namespace Gnutella
             Environment.Exit(1);
         }
 
+        //Button Action => connecting to new peer
         static void ConnectToPeer()
         {
             if (peerList != null && customConnection_TextBox != null)
                 peerList.AddPeer(customConnection_TextBox.input_string);
         }
+        //Button Action => asking for file
         static void QueryFile()
         {
             String strHostName = string.Empty;

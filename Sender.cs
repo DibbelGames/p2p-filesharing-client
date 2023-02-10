@@ -96,7 +96,7 @@ namespace Gnutella
             }
         }
 
-        public void SendQuery(string filename, IPAddress receiver)
+        public void SendQuery(string filename, IPAddress receiver, int ttl = 7)
         {
             try
             {

@@ -5,12 +5,16 @@ namespace Gnutella
     class FileSystem
     {
         string mypath = "/home/leon/Documents/Gnutella_Files/";
+        //string mypath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\Antheia\";
         string[] files;
 
         InformationBox alerts;
 
         public FileSystem(InformationBox alerts)
         {
+            //creating folder if it doesnt exist already
+            Directory.CreateDirectory(mypath);
+
             //updating the stored files
             files = Directory.GetFiles(mypath);
             this.alerts = alerts;

@@ -102,10 +102,10 @@ namespace Gnutella
                 else
                 {
                     //if file isnt found and ttl isnt yet 0 => send the same query to all connected peers with the ip of the receiever
-                    if (ttl < 7)
+                    if (ttl > 0)
                     {
                         ttl--;
-                        sender.SendQuery(filename, new IPAddress(ipAdress));
+                        sender.SendQuery(filename, new IPAddress(ipAdress), ttl);
                     }
                 }
             }

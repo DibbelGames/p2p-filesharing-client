@@ -6,12 +6,21 @@ namespace Gnutella
     {
         public List<Peer> listedPeers = new List<Peer>();
         string peerList_path = "/home/leon/Documents/Gnutella_Files/list.txt";
+        //string peerListDir_path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Antheia";
+        //string peerList_path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + @"\Antheia\peer_list.txt";
 
         InformationBox alerts;
 
         public PeerList(InformationBox alerts)
         {
             this.alerts = alerts;
+
+            //creating folder and file if they dont exist already
+            /*Directory.CreateDirectory(peerListDir_path);
+            if (!File.Exists(peerList_path))
+            {
+                FileStream fs = File.Create(peerList_path);
+            }*/
 
             //adding peers from local list
             string[] lines = File.ReadAllLines(peerList_path);
